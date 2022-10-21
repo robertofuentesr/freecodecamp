@@ -1,0 +1,3 @@
+* vpsql --username=freecodecamp dbname=postgres
+
+* \l
