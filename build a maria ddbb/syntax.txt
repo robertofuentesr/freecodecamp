@@ -1,3 +1,49 @@
-* vpsql --username=freecodecamp dbname=postgres
+* psql --username=freecodecamp dbname=postgres
 
 * \l
+
+* \c
+
+* \d
+
+* ALTER TABLE table_name ALTER COLUMN column_name SET NOT NULL;
+
+* CREATE TABLE table_name(column_name DATATYPE CONSTRAINTS);
+
+* INSERT INTO table_name(column_1, column_2) VALUES(value1, value2);
+
+You want to use character_id as a foreign key again. This will be a "one-to-many" relationship because one character will have many sounds, but no sound will have more than one character. Here's the example again:
+
+ALTER TABLE table_name ADD COLUMN column_name DATATYPE CONSTRAINT REFERENCES 
+referenced_table_name(referenced_column_name);
+
+Add a column to sounds named character_id. 
+Give it the properties INT, NOT NULL, and set it as a foreign key that references character_id from characters.
+
+* ALTER TABLE table_name ADD COLUMN 
+column_name DATATYPE REFERENCES referenced_table_name(referenced_column_name);
+
+* SELECT columns FROM junction_table
+FULL JOIN table_1 ON junction_table.foreign_key_column = table_1.primary_key_column
+FULL JOIN table_2 ON junction_table.foreign_key_column = table_2.primary_key_column;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,4 @@
+sh questionarie.sh
+which bash
+ls -l
+chmod +x questionnaire.sh
