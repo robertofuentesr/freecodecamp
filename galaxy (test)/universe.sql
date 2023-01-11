@@ -85,11 +85,35 @@ ALTER SEQUENCE public.galaxy_galaxy_id_seq OWNED BY public.galaxy.galaxy_id;
 --
 
 CREATE TABLE public.galaxy_map (
-    galaxy_id integer NOT NULL
+    galaxy_map_id integer NOT NULL,
+    name character varying(20) NOT NULL,
+    place character varying(50) NOT NULL
 );
 
 
 ALTER TABLE public.galaxy_map OWNER TO freecodecamp;
+
+--
+-- Name: galaxy_map_galaxy_map_id_seq; Type: SEQUENCE; Schema: public; Owner: freecodecamp
+--
+
+CREATE SEQUENCE public.galaxy_map_galaxy_map_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.galaxy_map_galaxy_map_id_seq OWNER TO freecodecamp;
+
+--
+-- Name: galaxy_map_galaxy_map_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: freecodecamp
+--
+
+ALTER SEQUENCE public.galaxy_map_galaxy_map_id_seq OWNED BY public.galaxy_map.galaxy_map_id;
+
 
 --
 -- Name: moon; Type: TABLE; Schema: public; Owner: freecodecamp
@@ -211,6 +235,13 @@ ALTER TABLE ONLY public.galaxy ALTER COLUMN galaxy_id SET DEFAULT nextval('publi
 
 
 --
+-- Name: galaxy_map galaxy_map_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.galaxy_map ALTER COLUMN galaxy_map_id SET DEFAULT nextval('public.galaxy_map_galaxy_map_id_seq'::regclass);
+
+
+--
 -- Name: moon moon_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
 --
 
@@ -238,8 +269,6 @@ ALTER TABLE ONLY public.star ALTER COLUMN star_id SET DEFAULT nextval('public.st
 INSERT INTO public.galaxy VALUES (1, 'milky wa', 10000, 50000.00, NULL);
 INSERT INTO public.galaxy VALUES (2, 'andromeda', 3000, 9999.00, NULL);
 INSERT INTO public.galaxy VALUES (3, 'centaurio', 5462546, 5629.00, NULL);
-INSERT INTO public.galaxy VALUES (4, 'totoro1', 214125, 43211342.00, 43);
-INSERT INTO public.galaxy VALUES (5, 'totoro1', 14125, 211342.00, 43);
 INSERT INTO public.galaxy VALUES (6, 'totoro2', 216125, 115342.00, 41);
 INSERT INTO public.galaxy VALUES (7, 'totoro3', 7625, 431342.00, 42);
 INSERT INTO public.galaxy VALUES (8, 'totoro4', 2141265, 32342.00, 45);
@@ -250,6 +279,9 @@ INSERT INTO public.galaxy VALUES (9, 'totoro5', 2141245, 2342.00, 46);
 -- Data for Name: galaxy_map; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
+INSERT INTO public.galaxy_map VALUES (1, 'yatama', 'yutimoto');
+INSERT INTO public.galaxy_map VALUES (2, 'santol', 'putahendo');
+INSERT INTO public.galaxy_map VALUES (3, 'sandia', 'yolanda');
 
 
 --
@@ -318,6 +350,13 @@ SELECT pg_catalog.setval('public.galaxy_galaxy_id_seq', 9, true);
 
 
 --
+-- Name: galaxy_map_galaxy_map_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
+--
+
+SELECT pg_catalog.setval('public.galaxy_map_galaxy_map_id_seq', 3, true);
+
+
+--
 -- Name: moon_moon_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
 --
 
@@ -339,11 +378,19 @@ SELECT pg_catalog.setval('public.star_star_id_seq', 6, true);
 
 
 --
+-- Name: galaxy_map galaxy_map_name_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.galaxy_map
+    ADD CONSTRAINT galaxy_map_name_key UNIQUE (name);
+
+
+--
 -- Name: galaxy_map galaxy_map_pkey; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
 --
 
 ALTER TABLE ONLY public.galaxy_map
-    ADD CONSTRAINT galaxy_map_pkey PRIMARY KEY (galaxy_id);
+    ADD CONSTRAINT galaxy_map_pkey PRIMARY KEY (galaxy_map_id);
 
 
 --
@@ -376,6 +423,38 @@ ALTER TABLE ONLY public.planet
 
 ALTER TABLE ONLY public.star
     ADD CONSTRAINT star_pkey PRIMARY KEY (star_id);
+
+
+--
+-- Name: galaxy unique_galaxy_name; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.galaxy
+    ADD CONSTRAINT unique_galaxy_name UNIQUE (name);
+
+
+--
+-- Name: moon unique_moon_name; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.moon
+    ADD CONSTRAINT unique_moon_name UNIQUE (name);
+
+
+--
+-- Name: planet unique_name; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.planet
+    ADD CONSTRAINT unique_name UNIQUE (name);
+
+
+--
+-- Name: star unique_star_name; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.star
+    ADD CONSTRAINT unique_star_name UNIQUE (name);
 
 
 --
