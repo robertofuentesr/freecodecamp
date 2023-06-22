@@ -1,0 +1,58 @@
+#! /bin/bash
+psql --username=freecodecamp --dbname=salon -c "
+SELECT CONCAT(service_id, ') ', name) FROM services;";
+
+#read SERVICE_ID_SELECTED
+while true; do
+  echo "Please enter the service ID:"
+  read SERVICE_ID_SELECTED
+
+  # Check if the service ID exists in the services table
+  if  psql --username=freecodecamp --dbname=salon -c "
+  SELECT service_id FROM services WHERE service_id = $SERVICE_ID_SELECTED" | grep -q "$SERVICE_ID_SELECTED
+  "; then
+    break
+  else
+    echo "Invalid service ID. Please try again."
+    psql --username=freecodecamp --dbname=salon -c "
+    SELECT CONCAT(service_id, ') ', name) FROM services;";
+  fi
+done
+#echo "Please enter the service you want, your phone, your name,time you will assist"
+#read SERVICE_ID_SELECTED,CUSTOMER_PHONE,CUSTOMER_NAME,SERVICE_TIME
+
+echo "please enter your phone"
+read CUSTOMER_PHONE
+
+if psql --username=freecodecamp --dbname=salon -c "
+SELECT customer_id FROM customers where phone='$CUSTOMER_PHONE'"| grep -q "$SERVICE_ID_SELECTED"; 
+then 
+CUSTOMER_ID=$(psql --username=freecodecamp --dbname=salon  -t -c "
+SELECT customer_id FROM customers where phone='$CUSTOMER_PHONE'") 
+echo "client in data base"
+else 
+
+echo "Please enter your name:"
+read CUSTOMER_NAME
+
+psql --username=freecodecamp --dbname=salon -c "
+insert into customers(phone,name) values('$CUSTOMER_PHONE','$CUSTOMER_NAME')"
+
+CUSTOMER_ID=$(psql --username=freecodecamp --dbname=salon  -t -c "
+SELECT customer_id FROM customers where phone='$CUSTOMER_PHONE'") 
+fi
+
+echo "Please enter the service time:"
+read SERVICE_TIME
+echo "CUSTOMER_ID: $CUSTOMER_ID"
+echo "SERVICE_ID_SELECTED: $SERVICE_ID_SELECTED"
+echo "SERVICE_TIME: $SERVICE_TIME"
+psql --username=freecodecamp --dbname=salon -c "
+insert into appointments(customer_id,service_id,time) values($CUSTOMER_ID,$SERVICE_ID_SELECTED,'$SERVICE_TIME')"
+
+PSQL="psql --username=freecodecamp --dbname=salon -t --no-align -c"
+
+SERVICE=$($PSQL "select name from services where service_id=$SERVICE_ID_SELECTED")
+Name=$($PSQL "select name from customers where customer_id=$CUSTOMER_ID")
+
+echo "I have put you down for a $SERVICE at $SERVICE_TIME, $Name."

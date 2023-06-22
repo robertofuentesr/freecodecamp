@@ -1,0 +1,20 @@
+psql --username=freecodecamp --dbname=salon -c "
+create table customers(
+    customer_id serial primary key,
+    phone varchar unique,
+    name varchar(15)
+ );
+ 
+create table services(
+    service_id serial primary key,
+    name varchar(15)
+ );
+
+ create table appointments(appointment_id serial primary key,
+ customer_id int,
+ service_id int,
+ time varchar(15),
+ foreign key (customer_id) references customers(customer_id),
+ foreign key (service_id) references services(service_id) );
+ 
+ insert into services(name) values ('shave'),('clean'),('beauty_enhancer'); ";
